@@ -6,9 +6,7 @@ const favouritesSchema = new Schema(
         userId: { type: String, required: true},
         recipeId: { type: String, required: true},
         title: { type: String, required: true },
-        image: { type: String },
-        cookTime: { type: String },
-        servings: { type: String }
+        image: { type: String }
     },
     { timestamps: true, minimize: false }
 );

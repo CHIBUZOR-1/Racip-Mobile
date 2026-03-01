@@ -1,10 +1,17 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { favouriteStore } from '@/store/favouritesStore';
 
 const Favourites = () => {
+  const favourites = favouriteStore(state => state.favourites);
+  const count= favouriteStore(state => state.count);
+  const fetchFavourites = favouriteStore(state => state.fetchFavourites);
+  useEffect(()=> {
+    fetchFavourites();
+  }, [])
   return (
-    <View>
-      <Text>Favourites</Text>
+    <View className='flex-1'>
+      <Text>{count}</Text>
     </View>
   )
 }

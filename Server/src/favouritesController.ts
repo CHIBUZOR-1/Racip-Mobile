@@ -1,12 +1,17 @@
 //Server/src/favouritesController.ts
 import { Request, Response } from "express";
 import favouritesModel from "./FavouritesSchema";
-import { addFavouriteBodySchema, addFavouriteParamsSchema, userParamsSchema } from "./Validators/favourites.validation";
+import { getAuth } from "@clerk/express";
+import { addFavouriteBodySchema, addFavouriteParamsSchema } from "./Validators/favourites.validation";
 
 const addToFavourites = async(req: Request, res: Response) => {
     try {
-      const { userId, recipeId } = addFavouriteParamsSchema.parse(req.params);
-      const { title, image, cookTime, servings} = addFavouriteBodySchema.parse(req.body);
+      const { userId } = getAuth(req); // 👈 GET FROM TOKEN
+      if (!userId) {
+        return res.status(401).json({ ok: false, msg: "Unauthorized" });
+      }
+      
+      const { recipeId, title, image } = addFavouriteBodySchema.parse(req.body);
       if (!userId || !recipeId) {
           return res.status(400).json({ ok: false, msg: "Cannot be null" });
       }
@@ -23,9 +28,7 @@ const addToFavourites = async(req: Request, res: Response) => {
         userId,
         recipeId,
         title,
-        image,
-        cookTime,
-        servings
+        image
       });
       await favourite.save();
 
@@ -44,7 +47,11 @@ const addToFavourites = async(req: Request, res: Response) => {
 }
 const getFavourites = async(req: Request, res: Response) => {
     try {
-      const { userId } = userParamsSchema.parse(req.params);
+      console.log('okay');
+      const { userId } = getAuth(req); // 👈 GET FROM TOKEN
+      if (!userId) {
+        return res.status(401).json({ ok: false, msg: "Unauthorized" });
+      }
 
       const favourites = await favouritesModel.find({ userId });
 
@@ -64,7 +71,11 @@ const getFavourites = async(req: Request, res: Response) => {
 
 const deleteFromFavourites = async(req: Request, res: Response) => {
     try {
-      const { userId, recipeId } = addFavouriteParamsSchema.parse(req.params);
+      const { userId } = getAuth(req); // 👈 GET FROM TOKEN
+      if (!userId) {
+        return res.status(401).json({ ok: false, msg: "Unauthorized" });
+      }
+      const { recipeId } = addFavouriteParamsSchema.parse(req.params);
 
       const deleted = await favouritesModel.findOneAndDelete({
         userId,
@@ -92,8 +103,12 @@ const deleteFromFavourites = async(req: Request, res: Response) => {
 }
 
 const clearFavourites = async(req: Request, res: Response) => {
-    try {
-    const { userId } = userParamsSchema.parse(req.params);
+  try {
+    const { userId } = getAuth(req); // 👈 GET FROM TOKEN
+    
+    if (!userId) {
+      return res.status(401).json({ ok: false, msg: "Unauthorized" });
+    }
 
     await favouritesModel.deleteMany({ userId });
 

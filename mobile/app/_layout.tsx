@@ -8,6 +8,12 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { ActivityIndicator } from "react-native";
 import { View } from "react-native";
+import { useApi } from "@/hooks/useApi";
+
+function ApiInterceptorSetup() { 
+  useApi(); 
+  return null;
+}
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -26,7 +32,8 @@ export default function RootLayout() {
     );
   }
   return (
-    <ClerkProvider tokenCache={tokenCache}>
+    <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!} tokenCache={tokenCache}>
+      <ApiInterceptorSetup />
         <SafeAreaView className="flex-1 bg-slate-600">
           <StatusBar style="auto" />
           <Stack screenOptions={{ headerShown: false}}>
