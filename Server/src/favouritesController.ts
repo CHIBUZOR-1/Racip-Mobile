@@ -35,6 +35,7 @@ const addToFavourites = async(req: Request, res: Response) => {
       return res.status(201).json({
         ok: true,
         msg: 'Added to favourites',
+        favourite
       });
     } catch (error) {
       return res.status(500).json({

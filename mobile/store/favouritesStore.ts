@@ -8,7 +8,7 @@ interface Favourite {
 }; 
 interface FavouritesStore { 
     favourites: Favourite[]; 
-    count: string;
+    count: number;
     loading: boolean; 
     error: string | null; 
     fetchFavourites: () => Promise<void>; 
@@ -20,19 +20,18 @@ interface FavouritesStore {
 export const favouriteStore = create<FavouritesStore>((set) => ({
     favourites: [], 
     loading: false, 
-    count: '',
+    count: 0,
     error: null,
     fetchFavourites: async () => { 
         set({ loading: true }); 
-        console.log('get it')
         try { 
             const { data } = await api.get("/fav/my-favourites"); 
             if (data.ok) {
-                console.log('got')
-              set({ favourites: data.data, count: data.count, loading: false });   
+              console.log(data)
+              set({ favourites: data.data, count: data.count});   
             }
         } catch (err: any) { 
-            set({ error: err.message, loading: false }); 
+            set({ error: err.message}); 
         } finally {
             set({ loading: false});
         }
