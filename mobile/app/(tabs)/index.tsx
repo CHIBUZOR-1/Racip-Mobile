@@ -15,7 +15,7 @@ const HomeScreen = () => {
   const { user } = useUser();
   const [imageLoaded, setImageLoaded] = useState(false)
   
-  const loading = recipeStore(state => state.loading)
+  const selectLoad = recipeStore(state => state.selectLoad)
   const recipes = recipeStore(state => state.recipes);
   const recipe = recipeStore(state => state.recipe)
   const rmeal = recipeStore(state => state.rmeal);
@@ -24,13 +24,16 @@ const HomeScreen = () => {
   const getRandomMeal = recipeStore(state => state.getRandomMeal)
   const getRecipeByCategory = recipeStore(state => state.getRecipeByCategory)
 
-  const [selectedCat, setSelectedCat] = useState<string | null>(null);
+  const [selectedCat, setSelectedCat] = useState<string>('');
   const [refreshing, setRefrshing] = useState(false);
 
   useEffect(() => {
    loadAll();
   }, []);
-
+  
+  useEffect(()=> {
+    fetchSelectedCat(selectedCat);
+  },[selectedCat])
    const logout = ()=> {
      Alert.alert("Logout", "Are you sure you want to logout?", [
       { text: "Cancel", style: "cancel"},
@@ -61,7 +64,10 @@ const HomeScreen = () => {
 
    const handleCatSelect = async(category: string)=> {
       setSelectedCat(category);
-      await getRecipeByCategory(category);
+   }
+
+   const fetchSelectedCat = async(category: string) => {
+    await getRecipeByCategory(category);
    }
    const onRefresh = async() => {
     setRefrshing(true);
@@ -77,10 +83,10 @@ const HomeScreen = () => {
      )
    }
   return (
-    <View className='flex-1 items-center gap-3'>
+    <View className='flex-1 items-center justify-center gap-3'>
       <View className='flex-row items-center px-2 justify-between w-full p-1'>
         <View>
-          <Image className='w-10 rounded-full h-10' source={{ uri: "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NJV2xXS2pvVGMzcWhuN2pja19yUHpsTkUxUG4xTkZseDV2LUJWRU9VeFlVLVJLTUE9czEwMDAtYyIsInMiOiI2dXdYM0htOHM5YmhLcmZKU0VVZnhVT1RmNlhZRS9mVmhUSFNqQ1kzak1BIn0"}}/>
+          <Image className='w-10 rounded-full h-10' source={{ uri: `${user?.imageUrl}`}}/>
         </View>
         <View>
           <Pressable onPress={logout} className=' p-1  flex items-center justify-center  active:bg-slate-300'>
@@ -95,8 +101,14 @@ const HomeScreen = () => {
         }
       >
         {/* Featured Recipe */}
-        <Link href={`/Favourites`} className='w-full relative h-80 flex items-center justify-center p-1 rounded-md'>
-              <View className='w-full h-full'>
+        <Link  href={{ pathname: "/meal/[id]", params: { id: rmeal.idMeal } }} className='w-full relative h-80 flex items-center justify-center p-1 rounded-md'>
+              <View style={{
+                elevation: 4,
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.5,
+                shadowRadius: 4,
+                shadowColor: '#64748b',
+              }} className='w-full h-full'>
                 <Image  resizeMode='cover' className='w-full rounded-lg h-full' source={{ uri: rmeal?.strMealThumb }}/>
                 <Text className={`bg-red-500 absolute top-2 left-2 text-white font-anton px-2 rounded-md ${imageLoaded && 'hidden'}`}>FEATURED</Text>
                 <Text className=' absolute bottom-2 [text-shadow:0_0_10px_#ef4444] right-2 text-white font-anton px-2 rounded-md'>{rmeal?.strMeal}</Text>
@@ -108,24 +120,26 @@ const HomeScreen = () => {
             <Categories categories={recipes} selectedCategory={selectedCat} onSelectCategory={handleCatSelect}/>
           )
         }
-        {/* Selected Category */}
+        {/* Selected Category user_36iHth9O8tJ6Wu54ictd5CUcsh4 */}
         <View className='w-full p-2'>
           <Text className='font-oswald text-red-700 text-2xl'>{selectedCat}</Text>
         </View>
-        {
-          recipe.length > 0 && (
-            <FlatList
-              data={recipe}
-              renderItem={({ item }) => <RecipeCard recipez={item} />}
-              keyExtractor={(item) => item?.idMeal.toString()}
-              numColumns={2}
-              columnWrapperStyle={{ justifyContent: 'space-between', paddingHorizontal: 3, gap: 4, display: 'flex', alignItems: 'center', paddingBottom: 2 }}
-              contentContainerStyle={{ gap: 2,  justifyContent: 'space-between', paddingHorizontal: 3}}
-              scrollEnabled={false}
-              ListEmptyComponent={<EmptyList/>}
-            />
-          )
-        }
+        <View className='flex w-full'>
+          {
+            recipe.length > 0 && (
+              <FlatList
+                data={recipe}
+                renderItem={({ item }) => <RecipeCard recipez={item} />}
+                keyExtractor={(item) => item?.idMeal.toString()}
+                numColumns={2}
+                columnWrapperStyle={{ justifyContent: 'space-between',  paddingHorizontal: 9, alignItems: 'center'}}
+                contentContainerStyle={{ gap: 10}}
+                scrollEnabled={false}
+                ListEmptyComponent={<EmptyList/>}
+              />
+            )
+          }
+        </View>
       </ScrollView>
     </View>
   )

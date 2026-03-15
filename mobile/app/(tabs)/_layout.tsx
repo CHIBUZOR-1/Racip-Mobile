@@ -20,7 +20,7 @@ const _layout = () => {
               headerShown: false,
               tabBarActiveTintColor: '#ef4444',
               tabBarStyle: {
-                height: 50 + insets.bottom,
+                height: 65,
               },
             }}
           >

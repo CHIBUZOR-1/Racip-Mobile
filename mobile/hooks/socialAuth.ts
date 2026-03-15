@@ -12,7 +12,7 @@ export const useSocialAuth = () => {
     const router = useRouter();
     const handleSocialAuth = async (strategy: "oauth_google" | "oauth_apple") => {
         setLoadingProvider(strategy);
-        try {
+        try { 
             const { createdSessionId, setActive } = await startSSOFlow({ strategy,  redirectUrl: Linking.createURL("/"), });
             if (createdSessionId && setActive) {
                 await setActive({ session: createdSessionId });

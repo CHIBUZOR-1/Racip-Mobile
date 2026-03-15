@@ -8,7 +8,13 @@ const index = () => {
   const { handleSocialAuth, loadingProvider } = useSocialAuth();
   return (
     <View className=' flex-1 items-center justify-center'>
-      <View  className='w-[90%] flex items-center shadow-sm  elevation-sm border-slate-300 shadow-red-200 rounded-sm justify-center gap-4 h-[50%] p-2 '>
+      <View style={{
+        elevation: 6,
+        shadowColor: '#64748b',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.5,
+        shadowRadius: 4,
+      }}  className='w-[90%] flex items-center bg-white border border-slate-300  rounded-md justify-center gap-4 h-[50%] p-2 '>
         <View className='flex items-center justify-center'>
           <View className=' p-1'>
             <Text className='text-gray-700 font-semibold text-2xl'>Sign in to Racip</Text>
@@ -18,7 +24,13 @@ const index = () => {
           </View>
         </View>
         <View className='flex gap-2 w-full'>
-          <Pressable onPress={() => handleSocialAuth("oauth_google")} className='shadow-sm flex-row active:bg-slate-200 rounded-sm w-full shadow-slate-600 p-2 flex items-center justify-center'>
+          <Pressable style={{
+            elevation: 4,
+            shadowColor: '#64748b',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.5,
+            shadowRadius: 4,
+          }} onPress={() => handleSocialAuth("oauth_google")} className=' flex-row bg-white active:bg-slate-200 rounded-md w-full  p-2 flex items-center justify-center'>
             {loadingProvider === "oauth_google" ? (
               <ActivityIndicator size={'small'} />
             ) :(
@@ -29,7 +41,13 @@ const index = () => {
               </>
             )}
           </Pressable>
-          <Pressable onPress={() => handleSocialAuth("oauth_apple")} className='shadow-sm flex-row rounded-sm active:bg-slate-200 w-full shadow-slate-600 p-2 flex items-center justify-center'>
+          <Pressable style={{
+            elevation: 4,
+            shadowColor: '#64748b',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.5,
+            shadowRadius: 4,
+          }} onPress={() => handleSocialAuth("oauth_apple")} className='shadow-sm flex-row rounded-md bg-white active:bg-slate-200 w-full shadow-slate-600 p-2 flex items-center justify-center'>
             {loadingProvider === "oauth_apple" ? (
               <ActivityIndicator size={'small'} />
             ) :(

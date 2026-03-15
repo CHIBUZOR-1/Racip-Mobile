@@ -20,6 +20,7 @@ const MealDetails = () => {
      const { height } = Dimensions.get("window");
     const getCategoryMealById = recipeStore(state => state.getCategoryMealById);
     const addFavourite = favouriteStore(state => state.addFavourite);
+    const addLoad = favouriteStore(state => state.addLoad)
     const load = favouriteStore(state => state.loading);
     const fetchFavourites= favouriteStore(state => state.fetchFavourites);
     const favourites= favouriteStore(state => state.favourites);
@@ -27,7 +28,6 @@ const MealDetails = () => {
 
     useEffect(()=> {
       getMealById();
-      console.log(id)
     }, [id]);
 
     const isFavourite = favourites.some(
@@ -80,7 +80,7 @@ const MealDetails = () => {
               <Pressable onPress={()=> router.back()} className='flex items-center justify-center p-2 bg-slate-500 rounded-full'>
                 <Ionicons name='arrow-back' size={20} color={'#f8fafc'}/>
               </Pressable>
-              <Pressable onPress={addOrRemoveFromFavourites} className='flex items-center p-2 bg-slate-400 rounded-full justify-center text-slate-50'>
+              <Pressable onPress={addOrRemoveFromFavourites} className={`flex items-center p-2  ${ isFavourite ? 'bg-red-200': 'bg-slate-400'} rounded-full justify-center text-slate-50`}>
                 <Ionicons name='heart' size={20} color={ isFavourite ? '#ef4444': '#f8fafc'}/>
               </Pressable>
             </View>
@@ -90,7 +90,7 @@ const MealDetails = () => {
               <View className='flex items-start '>
                 <Text className='text-slate-50 bg-red-500 p-1 rounded-md px-2 text-2xl font-rubik'>{meal?.strCategory}</Text>
               </View>
-              <Text className='font-rubik text-2xl text-white'>{meal?.strMeal}</Text>
+              <Text className='font-rubik [text-shadow:0_0_10px_#ef4444] text-2xl text-white'>{meal?.strMeal}</Text>
               {
                 meal?.strArea && (
                   <View className='flex-row items-center gap-1'>

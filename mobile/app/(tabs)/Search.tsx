@@ -37,10 +37,10 @@ const Search = () => {
   }
 
   return (
-    <View className='flex-1 w-full items-center p-1'>
+    <View className='flex-1 w-full items-center justify-center p-1'>
       <View className='w-full rounded-full border px-1 border-slate-200 flex-row items-center justify-between'>
-        <Ionicons name='search' size={20} color={'#475569'}/>
-        <TextInput className='rounded-full flex-1' value={search} onChangeText={setSearch} placeholder='Search recipes..'/>
+        <Ionicons name='search' size={20} color={'#dc2626'}/>
+        <TextInput className='rounded-full placeholder:text-slate-400 flex-1' value={search} onChangeText={setSearch} placeholder='Search recipes..'/>
         {
           search.length > 0 && (
             <Pressable onPress={()=> setSearch('')} className=' rounded-full bg-red-500 flex items-center justify-center h-9 w-9'>
@@ -69,8 +69,8 @@ const Search = () => {
                 renderItem={({ item }) => <RecipeCard recipez={item} />}
                 keyExtractor={(item) => item?.idMeal.toString()}
                 numColumns={2}
-                columnWrapperStyle={{ justifyContent: 'space-between', paddingHorizontal: 3, gap: 4, display: 'flex', alignItems: 'center', paddingBottom: 2 }}
-                contentContainerStyle={{ gap: 2,  justifyContent: 'space-between', paddingHorizontal: 3}}
+                columnWrapperStyle={{ justifyContent: 'space-between', gap: 8 }}
+                contentContainerStyle={{ gap: 10, width: '100%' }}
                 scrollEnabled={false}
                 ListEmptyComponent={<EmptyList/>}
               />

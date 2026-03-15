@@ -10,6 +10,9 @@ interface FavouritesStore {
     favourites: Favourite[]; 
     count: number;
     loading: boolean; 
+    addLoad: boolean; 
+    clLoad: boolean; 
+    removingId: string | null;
     error: string | null; 
     fetchFavourites: () => Promise<void>; 
     addFavourite: (fav: Favourite) => Promise<void>; 
@@ -20,6 +23,9 @@ interface FavouritesStore {
 export const favouriteStore = create<FavouritesStore>((set) => ({
     favourites: [], 
     loading: false, 
+    addLoad: false,
+    clLoad: false,
+    removingId: null,
     count: 0,
     error: null,
     fetchFavourites: async () => { 
@@ -27,7 +33,6 @@ export const favouriteStore = create<FavouritesStore>((set) => ({
         try { 
             const { data } = await api.get("/fav/my-favourites"); 
             if (data.ok) {
-              console.log(data)
               set({ favourites: data.data, count: data.count});   
             }
         } catch (err: any) { 
@@ -37,25 +42,38 @@ export const favouriteStore = create<FavouritesStore>((set) => ({
         }
     },
     addFavourite: async (fav) => {
-        set({ loading: true }); 
+        set({ addLoad: true }); 
         try { 
-            await api.post("/fav/add", fav); 
-            set({ loading: false }); 
+            const { data } = await api.post("/fav/add", fav); 
+            set((state) => ({
+                favourites: [...state.favourites, data.favourite],
+            }));
         } catch (err: any) { 
             set({ error: err.message }); 
         } finally {
-            set({ loading: false});
+            set({ addLoad: false});
         }
     },
     removeFavourite: async(recipeId)=> {
+        set({ removingId: recipeId }); 
         try {
             await api.delete(`/fav/remove/${recipeId}`); 
             set((state) => ({ favourites: state.favourites.filter((f) => f.recipeId !== recipeId), }));
         } catch (err: any) {
              set({ error: err.message }); 
         } finally {
-            set({ loading: false});
+            set({ removingId: null});
         }
     },
-    clearFavourites: async()=> {}
+    clearFavourites: async()=> {
+        set({ clLoad: true }); 
+        try {
+            await api.delete(`/fav/clear`); 
+            set({ favourites: [] });
+        } catch (err: any) {
+            set({ error: err.message }); 
+        } finally {
+            set({ clLoad: false});
+        }
+    }
 }));

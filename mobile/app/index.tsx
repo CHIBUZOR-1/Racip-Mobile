@@ -12,7 +12,7 @@ export default function Index() {
         <Text className="text-3xl [text-shadow:0_0_10px_#475569] font-rubik  text-white">
           Welcome to Racip
         </Text>
-        <Link href={'/(tabs)'} className={`bg-red-500 flex-row items-center gap-2 justify-center border border-slate-300 p-2 rounded-md text-white`} replace>
+        <Link href={'/(tabs)'} className={`bg-red-500 flex-row items-center gap-2 active:bg-red-300 justify-center border border-slate-300 p-2 rounded-md text-white`} replace>
           <Text className="text-white text-2xl  font-bold">Continue</Text>
           <Feather size={20} name="arrow-right" />
         </Link>

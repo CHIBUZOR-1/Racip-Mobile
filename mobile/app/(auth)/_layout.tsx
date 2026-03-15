@@ -10,5 +10,5 @@ export default function AuthRoutesLayout() {
     return <Redirect href={"/(tabs)"} />
   };
 
-  return <Stack screenOptions={{ headerTitle: 'Sign In'}}/>
+  return <Stack screenOptions={{ headerTitle: 'Sign In - Racip'}}/>
 }
