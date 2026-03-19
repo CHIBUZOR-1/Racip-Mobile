@@ -6,7 +6,6 @@ import { favouriteStore } from '@/store/favouritesStore';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { Dimensions } from "react-native";
-import { WebView } from "react-native-webview";
 import YoutubePlayer from "react-native-youtube-iframe";
 
 interface Ingredient {
